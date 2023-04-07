@@ -1,31 +1,102 @@
-# TemplateClass
+# Template Class
 
-TODO: Delete this and the text below, and describe your gem
+A way to define templated classes, in a similar fashion to C++ templates.
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/template_class`. To experiment with that code, run `bin/console` for an interactive prompt.
+In most cases Ruby doesn't need templated classes, nor any other system of generics, because it isn't statically type checked. However, sometimes we need to automatically generate multiple similar classes, either because of poor design or because of external necessities. For example, to define a GraphQL schema with [GraphQL Ruby](https://graphql-ruby.org/) we need to define a distinct class for each type. Since GraphQL is statically type checked but doesn't provide generics, if we need a set of similar but distinct types we're left to define them one by one.
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+Add this line to your application's Gemfile:
 
-Install the gem and add to the application's Gemfile by executing:
+```ruby
+gem 'template_class', '~> 1.0'
+```
 
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+And then execute:
 
-If bundler is not being used to manage dependencies, install the gem by executing:
+```bash
+$ bundle
+```
 
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+Or you can install the gem on its own:
+
+```bash
+gem install template_class
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+Include `TemplateClass::Template` in the class or module you want to make into a template. You can't make instances of a template; instead, you need to *specialize* it to some parameter. By default, any new specialization is an empty class. To define how a specialization is defined from a parameter, call `resolve_template_specialization`. The block you pass will be yielded the parameter that's specializing the template and a class constructor that makes it possible to recursively use the new specialization.
 
-## Development
+```ruby
+class List
+  include TemplateClass::Template
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+  resolve_template_specialization do |item_type, klass|
+    klass.new do
+      define_method :initialize do |items|
+        unless items.all? {|item| item.is_a? item_type}
+          raise ArgumentError
+        end
+        
+        @items = items
+      end
+      
+      define_method :push do |item|
+        raise ArgumentError unless item.is_a? item_type
+        
+        @items.push item
+      end
+      
+      def pop
+        @items.pop
+      end
+    end
+  end
+end
+```
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+`klass.new` behaves like `Class.new`, with the key difference that it saves the new class in the internal cache *before* it executes the block in the class scope. If you use `Class.new` the specialization still works as expected, but the class is cached *after* the block is executed, so a loop will be created if the code inside the block references the same specialization it is defining.
+
+`klass.new` also redefines `inspect` and `to_s` for the new class, so in strings it will appear with the usual C++ style:
+
+```ruby
+List[Integer].to_s # => List<Integer>
+```
+
+If a specific specialization needs to be defined separately, you can set it explicitly. This will behave like a C++ full specialization.
+
+```ruby
+List[:any] = Array
+```
+
+Notice that the parameter isn't constrained to classes: you can use any object.
+
+## Plans for future development
+
+- Multiple specialization parameters
+- Partial specialization
+
+## Version numbers
+
+Template Class loosely follows [Semantic Versioning](https://semver.org/), with a hard guarantee that breaking changes to the public API will always coincide with an increase to the `MAJOR` number.
+
+Version numbers are in three parts: `MAJOR.MINOR.PATCH`.
+
+- Breaking changes to the public API increment the `MAJOR`. There may also be changes that would otherwise increase the `MINOR` or the `PATCH`.
+- Additions, deprecations, and "big" non breaking changes to the public API increment the `MINOR`. There may also be changes that would otherwise increase the `PATCH`.
+- Bug fixes and "small" non breaking changes to the public API increment the `PATCH`.
+
+Notice that any feature deprecated by a minor release can be expected to be removed by the next major release.
+
+## Changelog
+
+Full list of changes in [CHANGELOG.md](CHANGELOG.md)
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/template_class.
+Bug reports and pull requests are welcome on GitHub at https://github.com/moku-io/template_class.
+
+## License
+
+The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
