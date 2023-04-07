@@ -4,5 +4,6 @@ require_relative 'template_class/version'
 
 module TemplateClass
   class Error < StandardError; end
-  # Your code goes here...
 end
+
+require_relative 'template_class/template'
