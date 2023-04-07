@@ -5,19 +5,18 @@ require_relative 'lib/template_class/version'
 Gem::Specification.new do |spec|
   spec.name = 'template_class'
   spec.version = TemplateClass::VERSION
-  spec.authors = ['Riccardo Agatea']
-  spec.email = ['riccardo@moku.io']
+  spec.authors = ['Moku S.r.l.', 'Riccardo Agatea']
+  spec.email = ['info@moku.io']
+  spec.license = 'MIT'
 
-  spec.summary = 'TODO: Write a short summary, because RubyGems requires one.'
-  spec.description = 'TODO: Write a longer description or delete this line.'
-  spec.homepage = 'TODO: Put your gem\'s website or public repo URL here.'
-  spec.required_ruby_version = '>= 2.6.0'
-
-  spec.metadata['allowed_push_host'] = 'TODO: Set to your gem server \'https://example.com\''
+  spec.summary = 'A way to define templated classes, in a similar fashion to C++ templates.'
+  spec.description = 'In most cases Ruby doesn\'t need templated classes, nor any other system of generics, because it isn\'t statically type checked. However, sometimes we need to automatically generate multiple similar classes, either because of poor design or because of external necessities. For example, to define a GraphQL schema with GraphQL Ruby (https://graphql-ruby.org/) we need to define a distinct class for each type. Since GraphQL is statically type checked but doesn\'t provide generics, if we need a set of similar but distinct types we\'re left to define them one by one.'
+  spec.homepage = 'https://github.com/moku-io/template_class'
+  spec.required_ruby_version = '>= 3.0.0' # Maybe we should check (?)
 
   spec.metadata['homepage_uri'] = spec.homepage
-  spec.metadata['source_code_uri'] = 'TODO: Put your gem\'s public repo URL here.'
-  spec.metadata['changelog_uri'] = 'TODO: Put your gem\'s CHANGELOG.md URL here.'
+  spec.metadata['source_code_uri'] = 'https://github.com/moku-io/template_class'
+  spec.metadata['changelog_uri'] = 'https://github.com/moku-io/template_class'
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
@@ -30,9 +29,5 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  # Uncomment to register a new dependency of your gem
-  # spec.add_dependency "example-gem", "~> 1.0"
-
-  # For more information and examples about making a new gem, check out our
-  # guide at: https://bundler.io/guides/creating_gem.html
+  spec.add_dependency 'activesupport', '~> 7.0.0'
 end

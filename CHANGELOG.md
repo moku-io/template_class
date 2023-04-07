@@ -1,5 +1,13 @@
-## [Unreleased]
+# Changelog
 
-## [0.1.0] - 2023-04-06
+[//]: # (
+## <Release number> <Date YYYY-MM-DD>
+### Breaking changes
+### Deprecations
+### New features
+### Bug fixes
+)
 
-- Initial release
+## 1.0.0 2023-04-07
+
+First release. Refer to [README.md](README.md) for the full documentation.
