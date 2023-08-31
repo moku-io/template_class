@@ -1,0 +1,13 @@
+module TemplateClass
+  module Template[T]
+    interface _CacheClassConstructor
+      def new: (?Class base_class) { () [self: Class] -> void } -> Class
+    end
+
+    interface _CacheModuleConstructor
+      def new: () { () [self: Module] -> void } -> Module
+    end
+
+    def resolve_template_specialization: () { (T key, _CacheClassConstructor klass, _CacheModuleConstructor mod) -> Class } -> void
+  end
+end
