@@ -58,7 +58,17 @@ end
 
 `klass.new` behaves like `Class.new`, with the key difference that it saves the new class in the internal cache *before* it executes the block in the class scope. If you use `Class.new` the specialization still works as expected, but the class is cached *after* the block is executed, so a loop will be created if the code inside the block references the same specialization it is defining.
 
-`klass.new` also redefines `inspect` and `to_s` for the new class, so in strings it will appear with the usual C++ style:
+A module analogue to `klass` is passed as third parameter to the block:
+
+```ruby
+resolve_template_specialization do |item_type, _, mod|
+  mod.new do
+    ...
+  end
+end
+```
+
+`klass.new` and `mod.new` also redefine `inspect` and `to_s` for the new class/module, so in strings it will appear with the usual C++ style:
 
 ```ruby
 List[Integer].to_s # => List<Integer>

@@ -46,13 +46,43 @@ module TemplateClass
         klass
       end
     end
-    private_constant :CacheClassConstructor
+
+    class CacheModuleConstructor
+      attr_reader :key
+      attr_reader :owner
+
+      delegate_missing_to :owner
+
+      def initialize key, owner
+        @key = key
+        @owner = owner
+      end
+
+      def new &block
+        mod = Module.new
+        owner[key] = mod
+
+        outer_self = self
+
+        mod.define_singleton_method :to_s do
+          "#{outer_self.owner}<#{outer_self.key}>"
+        end
+
+        mod.singleton_class.alias_method :inspect, :to_s
+
+        mod.module_exec(&block)
+        mod
+      end
+    end
+
+    private_constant :CacheClassConstructor, :CacheModuleConstructor
 
     class_methods do
       def resolve_template_specialization &block
         cache.default_proc = proc do |h, k|
           class_constructor = CacheClassConstructor.new k, self
-          result = block.call k, class_constructor
+          module_constructor = CacheModuleConstructor.new k, self
+          result = block.call k, class_constructor, module_constructor
 
           h[k] = result unless h.key? k
 
