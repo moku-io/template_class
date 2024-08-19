@@ -3,7 +3,7 @@ module TemplateClass
     extend ActiveSupport::Concern
 
     class_methods do
-      def bulk_instance(*args, into:, with_overrides: defined?(Zeitwerk))
+      def bulk_instantiate(*args, into:, with_overrides: defined?(Zeitwerk))
         constants(false)
           .map { |constant_name| const_get(constant_name) }
           .map do |constant|
