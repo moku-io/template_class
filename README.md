@@ -82,6 +82,32 @@ List[:any] = Array
 
 Notice that the parameter isn't constrained to classes: you can use any object.
 
+### Bulk Instantiation
+
+A module (or class) containing multiple templates can include `TemplateClass::BulkInstanceable` to be able to instantiate them in bulk using the same parameter.
+
+```ruby
+module Templates
+  include TemplateClass::BulkInstantiable
+  
+  class Template1
+    ...
+  end
+  
+  class Template2
+    ...
+  end
+end
+
+module Instances
+  Templates.bulk_instance Integer, into: self
+end
+```
+
+The new constants `Instances::Template1` and `Instances::Template2` are now defined, and they point respectively to `Templates::Template1[Integer]` and `Templates::Template2[Integer]`.
+
+The optional keyword argument `with_overrides`, which defaults to `true` if `Zeitwerk` is defined and to `false` otherwise, allows you to automatically access and reopen the instances in files that follow the Zeitwerk naming conventions (eg. you can reopen `Instances::Template1` in the file `instances/template1.rb`). If `with_overrides` is `false`, you can still reopen the instances, but you need to manually handle the appropriate `requires` in the appropriate order.
+
 ## Plans for future development
 
 - Multiple specialization parameters
