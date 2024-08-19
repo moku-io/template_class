@@ -8,6 +8,12 @@
 ### Bug fixes
 )-->
 
+## 1.2.0 2024-08-19
+
+### New features
+
+- Bulk instantiation
+
 ## 1.1.0 2023-08-31
 
 ### New features
