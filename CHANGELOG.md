@@ -8,6 +8,12 @@
 ### Bug fixes
 )-->
 
+## 1.2.1 2025-01-20
+
+### Bug fixes
+
+- Relaxed dependency.
+
 ## 1.2.0 2024-08-19
 
 ### New features
