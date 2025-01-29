@@ -8,6 +8,12 @@
 ### Bug fixes
 )-->
 
+## 1.2.2 2025-01-29
+
+### Bug fixes
+
+- Fixed overrides for bulk instantiation not being picked up in Rails >= 7.1.
+
 ## 1.2.1 2025-01-20
 
 ### Bug fixes
