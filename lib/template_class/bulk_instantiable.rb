@@ -10,8 +10,15 @@ module TemplateClass
             into.const_set constant.name.demodulize.to_sym, constant[*args]
           end
           .tap { return unless with_overrides } # rubocop:disable Lint/NonLocalExitFromIterator
-          .each do |instance|
-            require instance.name.underscore
+          .map do |instance|
+            Object
+              .const_source_location(instance.module_parent_name)
+              .first
+              .delete_suffix('.rb')
+              .then { "#{_1}/#{instance.name.demodulize.underscore}" }
+          end
+          .each do |path|
+            require path
           rescue LoadError
             nil
           end
