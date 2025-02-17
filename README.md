@@ -26,7 +26,7 @@ gem install template_class
 
 ## Usage
 
-Include `TemplateClass::Template` in the class or module you want to make into a template. You can't make instances of a template; instead, you need to *specialize* it to some parameter. By default, any new specialization is an empty class. To define how a specialization is defined from a parameter, call `resolve_template_specialization`. The block you pass will be yielded the parameter that's specializing the template and a class constructor that makes it possible to recursively use the new specialization.
+Include `TemplateClass::Template` in the class or module you want to make into a template. You can still make instances of a template, but you are expected to *specialize* it to some parameter. By default, any new specialization is an empty class. To define how a specialization is defined from a parameter, call `resolve_template_specialization`. The block you pass will be yielded the parameter that's specializing the template and a class constructor that makes it possible to recursively use the new specialization.
 
 ```ruby
 class List
