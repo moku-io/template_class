@@ -12,7 +12,6 @@ module TemplateClass
                    instance_accessor: false
 
       singleton_class.delegate :[], :[]=, to: :cache
-      singleton_class.undef_method :new
     end
 
     class CacheClassConstructor
