@@ -8,6 +8,12 @@
 ### Bug fixes
 )-->
 
+## 1.3.0 2025-02-17
+
+### New features
+
+- Allow for template classes to create instances with `new`.
+
 ## 1.2.2 2025-01-29
 
 ### Bug fixes
