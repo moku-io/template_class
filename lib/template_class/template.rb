@@ -32,7 +32,11 @@ module TemplateClass
         outer_self = self
 
         klass.define_singleton_method :to_s do
-          "#{outer_self.owner}<#{outer_self.key}>"
+          if respond_to?(:anonymous?) ? anonymous? : name.nil?
+            "#{outer_self.owner}<#{outer_self.key}>"
+          else
+            super()
+          end
         end
 
         klass.singleton_class.alias_method :inspect, :to_s
