@@ -8,6 +8,12 @@
 ### Bug fixes
 )-->
 
+## 1.3.1 2025-02-21
+
+### Bug fixes
+
+- Make the overrides of `to_s` and `inspect` of specializations return the name of the class in case it has one. Before, they would return the C++ style name even if the class/module had its own name.
+
 ## 1.3.0 2025-02-17
 
 ### New features
